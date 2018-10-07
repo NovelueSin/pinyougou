@@ -4,6 +4,8 @@ import tk.mybatis.mapper.common.Mapper;
 
 import com.pinyougou.pojo.Brand;
 
+import java.util.List;
+
 /**
  * BrandMapper 数据访问接口
  * @date 2018-09-26 10:28:00
@@ -12,5 +14,5 @@ import com.pinyougou.pojo.Brand;
 public interface BrandMapper extends Mapper<Brand>{
 
 
-
+    List<Brand> findAll(Brand brand);
 }

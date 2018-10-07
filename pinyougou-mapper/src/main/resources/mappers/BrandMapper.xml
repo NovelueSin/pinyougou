@@ -5,4 +5,18 @@
 
 <mapper namespace="com.pinyougou.mapper.BrandMapper">
 
+	<!--多条件查询-->
+	<select id="findAll" resultType="Brand">
+		select * from tb_brand
+		<where>
+			<!-- 品牌名称 -->
+			<if test="name != null and name !=''">
+				name like CONCAT('%',#{name},'%')
+			</if>
+			<!-- 首字母 -->
+			<if test="firstChar != null and firstChar !=''">
+				and first_char = #{firstChar}
+			</if>
+		</where>
+	</select>
 </mapper>

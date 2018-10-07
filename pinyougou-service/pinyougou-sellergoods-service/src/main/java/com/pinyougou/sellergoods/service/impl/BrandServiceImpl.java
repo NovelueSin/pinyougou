@@ -6,8 +6,10 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.mapper.BrandMapper;
 import com.pinyougou.pojo.Brand;
+import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.List;
  */
 
 @Service(interfaceName = "com.pinyougou.service.BrandService")
-//@Transactional
+@Transactional
 public class BrandServiceImpl implements BrandService {
 
     @Autowired
@@ -87,16 +89,16 @@ public class BrandServiceImpl implements BrandService {
     /**
      * 多条件分页查询
      */
-    public List<Brand> findByPage(Brand brand, int page, int rows) {
+    public PageResult findByPage(Brand brand, int page, int rows) {
         try {
             PageInfo<Brand> pageInfo = PageHelper.startPage(page, rows)
                     .doSelectPageInfo(new ISelect() {
                         @Override
                         public void doSelect() {
-                            brandMapper.selectAll();
+                            brandMapper.findAll(brand);
                         }
                     });
-            return pageInfo.getList();
+            return new PageResult(pageInfo.getTotal(),pageInfo.getList());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

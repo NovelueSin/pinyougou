@@ -3,9 +3,11 @@ package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.Brand;
+import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.BrandService;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -47,4 +49,17 @@ public class BrandController {
         return false;
     }
 
+    /*分页查询品牌*/
+    @GetMapping("/findByPage")
+    public PageResult findByPage(Brand brand,Integer page, Integer rows) {
+
+        /*Get请求中文转码*/
+        try{
+            brand.setName(new String(brand.getName().getBytes("ISO8859-1"),"UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return brandService.findByPage(brand, page, rows);
+    }
 }
