@@ -15,7 +15,7 @@
 	<link rel="stylesheet" href="/plugins/angularjs/pagination.css">
 	<script src="/plugins/angularjs/pagination.js"></script>
 	<!--分页模块结束-->
-	<script type="text/javascript">
+	<!--<script type="text/javascript">
 		/*引入分页模块pagination*/
         var app = angular.module("pinyougou", ['pagination']);
         //品牌 的 控制器
@@ -83,9 +83,42 @@
 				    $scope.paginationConf.totalItems = value.data.total;
 				})
             }
+
+            /*定义选中的ids数组*/
+            $scope.ids = [];
+            /*复选框点击事件*/
+            $scope.updateSelection = function ($event,id) {
+                /*如果被选中，添加到数组*/
+				if($event.target.checked) {
+                    $scope.ids.push(id);
+                }else {
+                    var idx = $scope.ids.indexOf(id);
+                    /*删除数组中的元素*/
+                    $scope.ids.splice(idx, 1);
+                }
+            }
+
+            /*批量删除*/
+            $scope.delete =  function () {
+				if($scope.ids.length >0) {
+					/*发送异步请求*/
+					$http.get('/brand/delete?ids='+$scope.ids).then(function (value) {
+					    /*重新加载品牌数据*/
+					    $scope.reload();
+					})
+                }else {
+					alert("选择要删除的元素！")
+                }
+            }
+
         });
 
-	</script>
+	</script>-->
+	<script src="/js/base-pagination.js"></script>
+	<script src="/js/service/baseService.js"></script>
+	<script src="/js/controller/baseController.js"></script>
+	<script src="/js/controller/brandController.js"></script>
+
 </head>
 <body class="hold-transition skin-red sidebar-mini"
 	  ng-app="pinyougou" ng-controller="brandController"> <!--ng-init="findAll();"-->
@@ -102,9 +135,10 @@
 				<div class="form-group form-inline">
 					<div class="btn-group">
 						<button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ng-click="entity={ }" ><i class="fa fa-file-o"></i> 新建</button>
-						<button type="button" class="btn btn-default" title="删除" ><i class="fa fa-trash-o"></i> 删除</button>           
+						<button type="button" class="btn btn-default" title="删除" ng-click="delete()"><i class="fa fa-trash-o"></i> 删除</button>
 						<button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
 					</div>
+					{{ids}}
 				</div>
 			</div>
 			<div class="box-tools pull-right">
@@ -131,7 +165,7 @@
 				<thead>
 					<tr>
 						<th class="" style="padding-right:0px">
-							<input id="selall" type="checkbox" class="icheckbox_square-blue">
+							<input id="selall" type="checkbox" class="icheckbox_square-blue" ng-click="checkAll();">
 						</th> 
 						<th class="sorting_asc">品牌ID</th>
 						<th class="sorting">品牌名称</th>									      
@@ -141,7 +175,7 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="item in dataList">
-						<td><input  type="checkbox" ></td>			                              
+						<td><input  type="checkbox"  ng-click="updateSelection($event,item.id);"></td>
 						<td>{{item.id}}</td>
 						<td>{{item.name}}</td>
 						<td>{{item.firstChar}}</td>

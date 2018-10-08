@@ -7,7 +7,6 @@ import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.BrandService;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -61,5 +60,17 @@ public class BrandController {
         }
 
         return brandService.findByPage(brand, page, rows);
+    }
+
+    /*删除品牌*/
+    @GetMapping("/delete")
+    public boolean delete(Long[] ids) {
+        try {
+            brandService.deleteAll(ids);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

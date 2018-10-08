@@ -10,8 +10,10 @@ import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,7 +63,14 @@ public class BrandServiceImpl implements BrandService {
      * 批量删除
      */
     public void deleteAll(Serializable[] ids) {
-
+        /*创建示范对象*/
+        Example example = new Example(Brand.class);
+        /*创建条件对象*/
+        Example.Criteria criteria = example.createCriteria();
+        /*添加in条件*/
+        criteria.andIn("id", Arrays.asList(ids));
+        /*根据条件删除*/
+        brandMapper.deleteByExample(example);
     }
 
     /**
