@@ -40,6 +40,11 @@ app.controller('specificationController', function($scope, $controller, baseServ
     $scope.show = function(entity){
        /** 把json对象转化成一个新的json对象 */
        $scope.entity = JSON.parse(JSON.stringify(entity));
+
+       /*调用服务层*/
+       baseService.sendGet("/specification/findSpecOption?id="+entity.id).then(function (value) {
+           $scope.entity.specificationOptions = value.data;
+       })
     };
 
     /** 批量删除 */
@@ -58,4 +63,15 @@ app.controller('specificationController', function($scope, $controller, baseServ
             alert("请选择要删除的记录！");
         }
     };
+
+    /*新增规格选项行*/
+    $scope.addTableRow = function () {
+        $scope.entity.specificationOptions.push({});
+    };
+
+    /*删除规格选项行*/
+    $scope.deleteTableRow = function (index) {
+        $scope.entity.specificationOptions.splice(index, 1);
+    }
+
 });

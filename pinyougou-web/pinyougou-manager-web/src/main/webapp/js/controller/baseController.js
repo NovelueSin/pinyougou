@@ -7,7 +7,7 @@ app.controller("baseController", function ($scope) {
         currentPage : 1, // 当前页码
         totalItems : 0, // 总记录数
         itemsPerPage : 10, // 每页显示的记录数
-        perPageOptions : [10,15,20], // 页码下拉列表
+        perPageOptions : [5,10,15,20], // 页码下拉列表
         onChange : function() { // 改变事件
             $scope.reload();
         }

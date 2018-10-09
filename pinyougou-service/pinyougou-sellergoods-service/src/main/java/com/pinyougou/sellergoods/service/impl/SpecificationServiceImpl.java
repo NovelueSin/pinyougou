@@ -5,8 +5,10 @@ import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.pinyougou.mapper.SpecificationMapper;
+import com.pinyougou.mapper.SpecificationOptionMapper;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Specification;
+import com.pinyougou.pojo.SpecificationOption;
 import com.pinyougou.service.SpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +22,17 @@ public class SpecificationServiceImpl implements SpecificationService{
 
     @Autowired
     private SpecificationMapper specificationMapper;
+    @Autowired
+    private SpecificationOptionMapper specificationOptionMapper;
 
     @Override
     public void save(Specification specification) {
-
+        try {
+            specificationMapper.insertSelective(specification);
+            specificationOptionMapper.save(specification);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -65,10 +74,22 @@ public class SpecificationServiceImpl implements SpecificationService{
                         }
                     }
             );
+            return new PageResult(pageInfo.getTotal(), pageInfo.getList());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
 
-        return null;
+    /*根据主键id查找规格选项*/
+    @Override
+    public List<SpecificationOption> findSpecOption(Long id) {
+        try {
+            /*创建规格选项对象封装查询条件*/
+            SpecificationOption so = new SpecificationOption();
+            so.setSpecId(id);
+            return specificationOptionMapper.select(so);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

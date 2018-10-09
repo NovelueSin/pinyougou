@@ -2,6 +2,8 @@ package com.pinyougou.service;
 
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.pojo.Specification;
+import com.pinyougou.pojo.SpecificationOption;
+
 import java.util.List;
 import java.io.Serializable;
 /**
@@ -32,4 +34,6 @@ public interface SpecificationService {
 	/** 多条件分页查询 */
 	PageResult findByPage(Specification specification, int page, int rows);
 
+	/*根据规格id查找规格选项*/
+	List<SpecificationOption> findSpecOption(Long id);
 }
