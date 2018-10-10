@@ -37,7 +37,21 @@ public class SpecificationServiceImpl implements SpecificationService{
 
     @Override
     public void update(Specification specification) {
-
+        try {
+            /*修改规格表数据*/
+            specificationMapper.updateByPrimaryKeySelective(specification);
+            /**########### 修改规格选项表数据 ###########*/
+            // 第一步：删除规格选项表中的数据 spec_id
+            // delete from tb_specification_option where spec_id = ?
+            // 创建规格选项对象，封装删除条件 通用Mapper
+            SpecificationOption so = new SpecificationOption();
+            so.setSpecId(specification.getId());
+            specificationOptionMapper.delete(so);
+            //第二步；往规格选项表插入数据
+            specificationOptionMapper.save(specification);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -47,7 +61,16 @@ public class SpecificationServiceImpl implements SpecificationService{
 
     @Override
     public void deleteAll(Serializable[] ids) {
-
+        try {
+            for (Serializable id : ids) {
+                SpecificationOption so = new SpecificationOption();
+                so.setSpecId((Long) id);
+                specificationOptionMapper.delete(so);
+                specificationMapper.deleteByPrimaryKey(id);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

@@ -14,4 +14,5 @@ public interface SpecificationMapper extends Mapper<Specification>{
 
     /*多条件规格查询*/
     List<Specification> findAll(Specification specification);
+
 }

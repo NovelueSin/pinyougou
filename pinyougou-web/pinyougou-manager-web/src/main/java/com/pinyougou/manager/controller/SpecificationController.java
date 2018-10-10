@@ -24,7 +24,7 @@ public class SpecificationController {
         /*Get请求中文转码*/
         if (specification != null && StringUtils.isNoneBlank(specification.getSpecName())) {
             try {
-                specification.setSpecName(new String(specification.getSpecName().getBytes("ISO8859-1"),"UTF-8"));
+                specification.setSpecName(new String(specification.getSpecName().getBytes("ISO8859-1"), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -48,5 +48,29 @@ public class SpecificationController {
     @GetMapping("/findSpecOption")
     public List<SpecificationOption> findSpecOption(Long id) {
         return specificationService.findSpecOption(id);
+    }
+
+    /*修改规格*/
+    @PostMapping("/update")
+    public boolean update(@RequestBody Specification specification) {
+        try {
+            specificationService.update(specification);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /*删除规格*/
+    @GetMapping("/delete")
+    public boolean delete(Long[] ids) {
+        try {
+            specificationService.deleteAll(ids);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
