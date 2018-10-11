@@ -23,6 +23,10 @@
             <artifactId>pinyougou-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+        </dependency>
 
     </dependencies>
 
