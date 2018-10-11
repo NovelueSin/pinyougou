@@ -8,6 +8,7 @@ import com.pinyougou.service.BrandService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/brand")
@@ -72,5 +73,11 @@ public class BrandController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /*查询所有品牌*/
+    @GetMapping("/findBrandList")
+    public List<Map<String,Object>> findBrandList() {
+        return brandService.findAllByIdAndName();
     }
 }

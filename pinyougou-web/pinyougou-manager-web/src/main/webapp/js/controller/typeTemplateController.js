@@ -40,6 +40,12 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
     $scope.show = function(entity){
        /** 把json对象转化成一个新的json对象 */
        $scope.entity = JSON.parse(JSON.stringify(entity));
+       /*转换品牌列表*/
+        $scope.entity.brandIds = JSON.parse(entity.brandIds);
+        /*转换规格列表*/
+        $scope.entity.specIds = JSON.parse(entity.specIds);
+        /*转换扩展属性*/
+        $scope.entity.customAttributeItems = JSON.parse(entity.customAttributeItems);
     };
 
     /** 批量删除 */
@@ -58,4 +64,31 @@ app.controller('typeTemplateController', function($scope, $controller, baseServi
             alert("请选择要删除的记录！");
         }
     };
+
+
+    /*品牌列表*/
+    $scope.findBrandList = function () {
+        baseService.sendGet("/brand/findBrandList").then(function (value) {
+            $scope.brandList = {data:value.data}
+        });
+    };
+
+    /*规格列表*/
+    $scope.findSpecList = function () {
+        baseService.sendGet("/specification/findSpecList").then(function (value) {
+            $scope.specList = {data:value.data};
+        });
+    };
+
+    /*新增扩展属性行*/
+    $scope.addTableRow = function () {
+        $scope.entity.customAttributeItems.push({});
+    }
+
+    /*删除扩展属性行*/
+    $scope.deleteTableRow = function (index) {
+        $scope.entity.customAttributeItems.splice(index, 1);
+    }
+
+
 });

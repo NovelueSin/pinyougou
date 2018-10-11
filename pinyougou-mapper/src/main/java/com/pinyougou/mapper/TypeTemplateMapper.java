@@ -13,4 +13,5 @@ import java.util.List;
 public interface TypeTemplateMapper extends Mapper<TypeTemplate>{
 
     List<TypeTemplate> findAll(TypeTemplate typeTemplate);
+
 }

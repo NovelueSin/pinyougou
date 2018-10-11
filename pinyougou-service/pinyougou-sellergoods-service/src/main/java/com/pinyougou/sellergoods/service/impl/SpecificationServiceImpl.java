@@ -15,10 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 @Service(interfaceName = "com.pinyougou.service.SpecificationService")
 @Transactional
-public class SpecificationServiceImpl implements SpecificationService{
+public class SpecificationServiceImpl implements SpecificationService {
 
     @Autowired
     private SpecificationMapper specificationMapper;
@@ -89,7 +90,7 @@ public class SpecificationServiceImpl implements SpecificationService{
 
         try {
             /*开始分页*/
-            PageInfo<Specification> pageInfo = PageHelper.startPage(page,rows).doSelectPageInfo(
+            PageInfo<Specification> pageInfo = PageHelper.startPage(page, rows).doSelectPageInfo(
                     new ISelect() {
                         @Override
                         public void doSelect() {
@@ -115,4 +116,15 @@ public class SpecificationServiceImpl implements SpecificationService{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Map<String, Object>> findAllByIdAndName() {
+        try {
+            return specificationMapper.findAllByIdAndName();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }

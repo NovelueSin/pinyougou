@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/specification")
@@ -72,5 +73,11 @@ public class SpecificationController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /*查找所有规格*/
+    @GetMapping("/findSpecList")
+    public List<Map<String,Object>> findSpecList() {
+        return specificationService.findAllByIdAndName();
     }
 }

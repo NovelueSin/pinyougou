@@ -31,4 +31,18 @@ app.controller("baseController", function ($scope) {
         }
     };
 
+
+    /*优化模板列表显示*/
+    /*提取数组中json 某个属性，返回拼接的字符串 ，逗号分隔*/
+    $scope.jsonArr2Str = function (jsonArrStr, key) {
+        /*把jsonArrStr转换为json 数组对象*/
+        var jsonArr = JSON.parse(jsonArrStr);
+        var resArr = [];
+        for(var i = 0;i<jsonArr.length;i++) {
+            var json = jsonArr[i];
+            /*把json对象的值添加到新数组*/
+            resArr.push(json[key]);
+        }
+        return resArr.join(",");
+    }
 });
