@@ -4,9 +4,7 @@ package com.pinyougou.manager.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.ItemCat;
 import com.pinyougou.service.ItemCatService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +21,16 @@ public class ItemCatController {
         return itemCatService.findItemCatByParentId(parentId);
     }
 
-
+    /*保存商品分类*/
+    @PostMapping("/save")
+    public boolean save(@RequestBody ItemCat itemCat) {
+        try {
+            itemCatService.save(itemCat);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 }

@@ -15,6 +15,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Service(interfaceName = "com.pinyougou.service.TypeTemplateService")
 @Transactional
@@ -74,6 +75,15 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
                 }
             });
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> findTypeTemplateList() {
+        try {
+            return typeTemplateMapper.findTypeTemplateList();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

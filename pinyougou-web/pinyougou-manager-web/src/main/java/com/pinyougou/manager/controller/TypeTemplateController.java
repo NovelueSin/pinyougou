@@ -7,6 +7,9 @@ import com.pinyougou.service.TypeTemplateService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/typeTemplate")
 public class TypeTemplateController {
@@ -65,5 +68,11 @@ public class TypeTemplateController {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /*查询所有可用模板*/
+    @GetMapping("/findTypeTemplateList")
+    public List<Map<String, Object>> findTypeTemplateList() {
+        return typeTemplateService.findTypeTemplateList();
     }
 }

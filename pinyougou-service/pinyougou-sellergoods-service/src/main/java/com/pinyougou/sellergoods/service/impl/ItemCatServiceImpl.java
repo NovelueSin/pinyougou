@@ -19,7 +19,7 @@ public class ItemCatServiceImpl implements ItemCatService {
 
     @Override
     public void save(ItemCat itemCat) {
-
+        itemCatMapper.insertSelective(itemCat);
     }
 
     @Override
