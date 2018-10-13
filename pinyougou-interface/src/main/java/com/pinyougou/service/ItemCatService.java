@@ -1,6 +1,9 @@
 package com.pinyougou.service;
 
 import com.pinyougou.pojo.ItemCat;
+import com.pinyougou.pojo.PageResult;
+
+import java.sql.ResultSet;
 import java.util.List;
 import java.io.Serializable;
 /**
@@ -29,7 +32,7 @@ public interface ItemCatService {
 	List<ItemCat> findAll();
 
 	/** 多条件分页查询 */
-	List<ItemCat> findByPage(ItemCat itemCat, int page, int rows);
+	PageResult findByPage(ItemCat itemCat, int page, int rows);
 
     List<ItemCat> findItemCatByParentId(Long parentId);
 }

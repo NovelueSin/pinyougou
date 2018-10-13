@@ -18,6 +18,13 @@ app.controller('itemCatController', function ($scope, $controller, baseService) 
             });
     };
 
+    /*根据上级id显示下级列表*/
+    $scope.findItemCatByParentId = function (parentId) {
+        baseService.sendGet("/itemCat/findItemCatByParentId", "parentId=" + parentId).then(function (value) {
+            $scope.dataList = value.data;
+        })
+    }
+
     /** 添加或修改 */
     $scope.saveOrUpdate = function () {
 
@@ -72,12 +79,7 @@ app.controller('itemCatController', function ($scope, $controller, baseService) 
         }
     };
 
-    /*根据上级id显示下级列表*/
-    $scope.findItemCatByParentId = function (parentId) {
-        baseService.sendGet("/itemCat/findItemCatByParentId", "parentId=" + parentId).then(function (value) {
-            $scope.dataList = value.data;
-        })
-    }
+
 
     /*默认等级为1*/
     $scope.grade = 1;
