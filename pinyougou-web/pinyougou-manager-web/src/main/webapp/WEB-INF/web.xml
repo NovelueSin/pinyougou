@@ -34,7 +34,25 @@
 
 	<!-- 欢迎列表 -->
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>login.html</welcome-file>
 	</welcome-file-list>
 
+	<!--配置spring加载文件-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext*.xml</param-value>
+	</context-param>
+	<!--配置spring 的核心监听器-->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!--配置SpringSecurity委派过滤器-->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>
