@@ -37,6 +37,7 @@
 		<welcome-file>login.html</welcome-file>
 	</welcome-file-list>
 
+	<!--spring-security配置-->
 	<!--配置spring加载文件-->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

@@ -36,6 +36,19 @@ app.controller('sellerController', function($scope, $controller, baseService){
             });
     };
 
+    /*修改商家状态*/
+    $scope.updateStatus = function (sellerId, status) {
+        baseService.sendGet("/seller/updateStatus?sellerId="+sellerId+"&status="+status)
+            .then(function (response) {
+                if(response.data) {
+                    $scope.reload();
+                }else {
+                    alert("操作失败");
+                }
+        });
+    };
+
+
     /** 显示修改 */
     $scope.show = function(entity){
        /** 把json对象转化成一个新的json对象 */
