@@ -54,7 +54,7 @@ public class SellerServiceImpl implements SellerService {
 
     @Override
     public Seller findOne(Serializable id) {
-        return null;
+        return sellerMapper.selectByPrimaryKey(id);
     }
 
     @Override
