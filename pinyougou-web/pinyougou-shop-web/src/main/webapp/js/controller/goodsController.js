@@ -20,21 +20,42 @@ app.controller('goodsController', function($scope, $controller, baseService){
 
     /** 添加或修改 */
     $scope.saveOrUpdate = function(){
+
+        /*获取富文本编辑器的内容*/
+        $scope.goods.goodsDesc.introduction = editor.html();
+
         var url = "save";
-        if ($scope.entity.id){
+        if ($scope.goods.id){
             url = "update";
         }
         /** 发送post请求 */
-        baseService.sendPost("/goods/" + url, $scope.entity)
+        baseService.sendPost("/goods/" + url, $scope.goods)
             .then(function(response){
                 if (response.data){
-                    /** 重新加载数据 */
-                    $scope.reload();
+                    alert("保存成功");
+                    /*清空表单*/
+                    $scope.goods = {};
+                    /*清空富文本*/
+                    editor.html('');
                 }else{
                     alert("操作失败！");
                 }
             });
     };
+
+    /*上传图片*/
+    $scope.uploadFile = function () {
+        baseService.uploadFile().then(function (value) {
+           /*如果上传成功*/
+           if(value.data.status == 200) {
+               /*设置图片访问地址*/
+               $scope.picEntity.url = value.data.url;
+           }else {
+               alert("上传失败")
+           }
+        });
+    }
+
 
     /** 显示修改 */
     $scope.show = function(entity){
