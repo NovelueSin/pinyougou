@@ -1,11 +1,14 @@
 package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.pinyougou.mapper.SpecificationOptionMapper;
 import com.pinyougou.mapper.TypeTemplateMapper;
 import com.pinyougou.pojo.PageResult;
+import com.pinyougou.pojo.SpecificationOption;
 import com.pinyougou.pojo.TypeTemplate;
 import com.pinyougou.service.TypeTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,9 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Autowired
     private TypeTemplateMapper typeTemplateMapper;
+
+    @Autowired
+    private SpecificationOptionMapper specificationOptionMapper;
 
     @Override
     public void save(TypeTemplate typeTemplate) {
@@ -84,6 +90,28 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
     public List<Map<String, Object>> findTypeTemplateList() {
         try {
             return typeTemplateMapper.findTypeTemplateList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Map> findSpecByTemplateId(Long id) {
+        try {
+            /*根据主键id查询模板*/
+            TypeTemplate typeTemplate = findOne(id);
+            /*获取模板中所有规格，转换为List<Map>*/
+            List<Map> specList = JSON.parseArray(typeTemplate.getSpecIds(), Map.class);
+            /*迭代所有模板中的规格*/
+            for (Map map : specList) {
+                /*创建查询条件对象*/
+                SpecificationOption so = new SpecificationOption();
+                so.setSpecId(Long.valueOf(map.get("id").toString()));
+                /*通过规格id，查询规格选项数据*/
+                List<SpecificationOption> specOptions = specificationOptionMapper.select(so);
+                map.put("options", specOptions);
+            }
+            return specList;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
