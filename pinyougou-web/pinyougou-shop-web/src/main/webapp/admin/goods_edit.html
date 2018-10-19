@@ -31,7 +31,7 @@
 	</head>
 
 	<body class="hold-transition skin-red sidebar-mini"
-	   ng-app="pinyougou" ng-controller="goodsController">
+	   ng-app="pinyougou" ng-controller="goodsController" ng-init="findItemCatByParentId(0,'itemCatList1');">
 		<!-- 正文区域 -->
 		<section class="content">
 			<div class="box-body">
@@ -54,11 +54,21 @@
 								<div class="col-md-10 data">
 									<table>
 										<tr>
-											<td><select class="form-control">
+											<td><select class="form-control" ng-model="goods.category1Id"
+                                            ng-options="i.id as i.name for i in itemCatList1">
+                                                <option value="">==1级分类==</option>
 											</select></td>
-											<td><select class="form-control select-sm"></select></td>
-											<td><select class="form-control select-sm"></select></td>
-											<td>模板ID:19</td>
+											<td><select class="form-control select-sm"
+                                                ng-model="goods.category2Id"
+                                                ng-options="i.id as i.name for i in itemCatList2">
+                                               <option value="">==2级分类==</option>
+                                            </select></td>
+											<td><select class="form-control select-sm"
+                                                        ng-model="goods.category3Id"
+                                                        ng-options="i.id as i.name for i in itemCatList3">\
+                                                <option value="">==3级分类==</option>
+                                            </select></td>
+											<td>模板ID:{{goods.typeTemplatedId}}</td>
 										</tr>
 									</table>
 								</div>
@@ -66,12 +76,15 @@
 								<div class="col-md-2 title">商品名称</div>
 								<div class="col-md-10 data">
 									<input type="text" class="form-control" placeholder="商品名称"
-										value="" ng-model="goodsd.goodsName">
+										value="" ng-model="goods.goodsName">
 								</div>
 	
 								<div class="col-md-2 title">品牌</div>
 								<div class="col-md-10 data">
-									<select class="form-control"></select>
+									<select class="form-control" ng-model="goods.brandId"
+									 	ng-options="b.id as b.text for b in brandIds" >
+										<option value="">==选择品牌==</option>
+									</select>
 								</div>
 	
 								<div class="col-md-2 title">副标题</div>
@@ -115,7 +128,7 @@
 								<div class="btn-group">
 									<button type="button" class="btn btn-default" title="新建"
 										data-target="#uploadModal" data-toggle="modal"
-											ng-click="picEntity={}">
+											ng-click="picEntity={ }">
 										<i class="fa fa-file-o"></i> 新建
 									</button>
 	
@@ -131,12 +144,13 @@
 											<th class="sorting">操作</th>
 									</thead>
 									<tbody>
-										<tr>
-											<td></td>
-											<td><img alt="" src="" width="100px" height="100px">
+										<tr ng-repeat="pic in goods.goodsDesc.itemImages">
+											<td>{{pic.color}}</td>
+											<td><img alt="" src="{{pic.url}}}" width="100px" height="100px">
 											</td>
 											<td>
-												<button type="button" class="btn btn-default" title="删除">
+												<button type="button" class="btn btn-default" title="删除"
+												 ng-click="removePic($index); ">
 													<i class="fa fa-trash-o"></i> 删除
 												</button>
 											</td>
@@ -150,16 +164,10 @@
 						<!--扩展属性-->
 						<div class="tab-pane" id="customAttribute">
 							<div class="row data-type">
-								<div>
-									<div class="col-md-2 title">扩展属性1</div>
+								<div ng-repeat="c in goods.goodsDesc.customAttributeItems">
+									<div class="col-md-2 title">{{c.text}}</div>
 									<div class="col-md-10 data">
-										<input class="form-control" placeholder="扩展属性1">
-									</div>
-								</div>
-								<div>
-									<div class="col-md-2 title">扩展属性2</div>
-									<div class="col-md-10 data">
-										<input class="form-control" placeholder="扩展属性2">
+										<input class="form-control" ng-model="c.value" placeholder="{{c.text}}">
 									</div>
 								</div>
 							</div>
@@ -310,7 +318,7 @@
 					</div>
 					<div class="modal-footer">
 						<button class="btn btn-success" data-dismiss="modal"
-							aria-hidden="true">保存</button>
+							aria-hidden="true" ng-click="addPic();">保存</button>
 						<button class="btn btn-default" data-dismiss="modal"
 							aria-hidden="true">关闭</button>
 					</div>
