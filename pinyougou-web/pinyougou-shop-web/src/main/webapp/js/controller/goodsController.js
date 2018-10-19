@@ -1,6 +1,10 @@
 /** 定义控制器层 */
 app.controller('goodsController', function ($scope, $controller, baseService) {
 
+    /*定义商品状态数组*/
+    $scope.status = ['未审核','已审核','审核未通过','关闭'];
+
+
     /** 指定继承baseController */
     $controller('baseController', {$scope: $scope});
 
@@ -213,4 +217,7 @@ app.controller('goodsController', function ($scope, $controller, baseService) {
         }
         return newItems;
     }
+
+
+
 });

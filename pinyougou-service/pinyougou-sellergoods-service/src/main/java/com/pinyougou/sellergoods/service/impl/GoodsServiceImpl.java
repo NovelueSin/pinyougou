@@ -3,9 +3,14 @@ package com.pinyougou.sellergoods.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pinyougou.mapper.*;
 import com.pinyougou.pojo.Goods;
 import com.pinyougou.pojo.Item;
+import com.pinyougou.pojo.ItemCat;
+import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -146,7 +151,29 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     @Override
-    public List<Goods> findByPage(Goods goods, int page, int rows) {
-        return null;
+    public PageResult findByPage(Goods goods, int page, int rows) {
+        try {
+            /*开始分页*/
+            PageInfo<Map<String, Object>> pageInfo = PageHelper.startPage(page, rows).doSelectPageInfo(new ISelect() {
+                @Override
+                public void doSelect() {
+                    goodsMapper.findAll(goods);
+                }
+            });
+            /*循环查询到的商品*/
+            for (Map<String, Object> map : pageInfo.getList()) {
+                ItemCat itemCat1 = itemCatMapper.selectByPrimaryKey(map.get("category1Id"));
+                map.put("category1Name",itemCat1 != null ? itemCat1.getName(): "");
+                ItemCat itemCat2 = itemCatMapper.selectByPrimaryKey(map.get("category2Id"));
+                map.put("category2Name",itemCat2 != null ? itemCat2.getName(): "");
+                ItemCat itemCat3 = itemCatMapper.selectByPrimaryKey(map.get("category3Id"));
+                map.put("category3Name",itemCat3 != null ? itemCat3.getName(): "");
+            }
+
+            return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
