@@ -1,6 +1,9 @@
 /** 定义控制器层 */
 app.controller('contentController', function($scope, $controller, baseService){
 
+    /*广告状态*/
+    $scope.status = ["无效","有效"];
+
     /** 指定继承baseController */
     $controller('baseController',{$scope:$scope});
 
@@ -58,4 +61,24 @@ app.controller('contentController', function($scope, $controller, baseService){
             alert("请选择要删除的记录！");
         }
     };
+
+    /*定义文件上传方法*/
+    $scope.uploadFile = function () {
+        baseService.uploadFile().then(function (value) {
+            /*如果上传成功，取出url*/
+            if (value.data.status == 200) {
+                /*设置图片访问地址*/
+                $scope.entity.pic = value.data.url;
+            }else {
+                alert("上传失败");
+            }
+        });
+    };
+    /*加载广告数据*/
+    $scope.findContentCategoryList = function () {
+        baseService.sendGet("/contentCategory/findAll").then(function (value) {
+           $scope.contentCategoryList = value.data;
+        });
+    }
+
 });

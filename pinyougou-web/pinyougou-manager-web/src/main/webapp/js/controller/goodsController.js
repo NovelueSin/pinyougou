@@ -1,6 +1,13 @@
 /** 定义控制器层 */
 app.controller('goodsController', function($scope, $controller, baseService){
 
+
+    /** 定义商品状态数组 */
+    $scope.status = ['未审核','已审核','审核未通过','关闭'];
+
+    $scope.ids=[];
+
+
     /** 指定继承baseController */
     $controller('baseController',{$scope:$scope});
 
@@ -58,4 +65,22 @@ app.controller('goodsController', function($scope, $controller, baseService){
             alert("请选择要删除的记录！");
         }
     };
+
+    $scope.updateStatus = function (status) {
+        if($scope.ids.length>0) {
+            baseService.sendGet("/goods/updateStatus?ids=" + $scope.ids + "&status=" + status).then(function (value) {
+                if (value.data) {
+                    $scope.reload();
+                    $scope.ids = [];
+                } else {
+                    alert("操作失败");
+                }
+            })
+        }else {
+            alert("选择需要审核的商品...")
+        }
+    }
+
+
+
 });

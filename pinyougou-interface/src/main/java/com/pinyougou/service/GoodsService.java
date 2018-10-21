@@ -33,4 +33,7 @@ public interface GoodsService {
 	/** 多条件分页查询 */
 	PageResult findByPage(Goods goods, int page, int rows);
 
+	void updateStatus(Long[] ids, String status);
+
+	void updateMarketable(Long[] ids, String status);
 }

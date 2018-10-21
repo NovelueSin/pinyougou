@@ -1,9 +1,12 @@
 package com.pinyougou.service;
 
 import com.pinyougou.pojo.ContentCategory;
+import com.pinyougou.pojo.PageResult;
+
 import java.util.List;
 import java.io.Serializable;
 /**
+ * 广告分类
  * ContentCategoryService 服务接口
  * @date 2018-09-26 11:12:14
  * @version 1.0
@@ -29,6 +32,6 @@ public interface ContentCategoryService {
 	List<ContentCategory> findAll();
 
 	/** 多条件分页查询 */
-	List<ContentCategory> findByPage(ContentCategory contentCategory, int page, int rows);
+	PageResult findByPage(ContentCategory contentCategory, int page, int rows);
 
 }

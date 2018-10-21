@@ -135,9 +135,17 @@ public class GoodsServiceImpl implements GoodsService {
 
     }
 
+    /**
+     * 修改商品为删除状态
+     * @param ids
+     */
     @Override
     public void deleteAll(Serializable[] ids) {
-
+        try {
+            goodsMapper.updateDeleteStatus(ids, "1");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -172,6 +180,24 @@ public class GoodsServiceImpl implements GoodsService {
 
             return new PageResult(pageInfo.getTotal(), pageInfo.getList());
 
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateStatus(Long[] ids, String status) {
+        try {
+            goodsMapper.updateStatus(ids, status);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateMarketable(Long[] ids, String status) {
+        try {
+            goodsMapper.updateMarketable(ids, status);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

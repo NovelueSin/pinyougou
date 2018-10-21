@@ -21,6 +21,7 @@ app.controller("baseController", function ($scope) {
     $scope.ids = [];
     /** 定义checkbox点击事件函数 */
     $scope.updateSelection = function($event, id){
+        alert("1")
         /** 判断checkbox是否选中 */
         if ($event.target.checked){
             $scope.ids.push(id);
