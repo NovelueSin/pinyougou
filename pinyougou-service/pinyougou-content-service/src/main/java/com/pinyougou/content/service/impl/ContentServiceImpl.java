@@ -104,4 +104,20 @@ public class ContentServiceImpl implements ContentService {
 		}
 	}
 
+	@Override
+	public List<Content> findContentByCategoryId(Long categoryId) {
+		try {
+			Example example = new Example(Content.class);
+			Example.Criteria criteria = example.createCriteria();
+			//添加等于条件
+			criteria.andEqualTo("categoryId", categoryId);
+			criteria.andEqualTo("status", "1");
+			/*排序 升序*/
+			example.orderBy("sortOrder").asc();
+			return contentMapper.selectByExample(example);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 }
