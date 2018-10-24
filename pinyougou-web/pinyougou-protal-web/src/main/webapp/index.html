@@ -15,6 +15,13 @@
     <script src="/js/service/baseService.js"></script>
     <script src="/js/controller/indexController.js"></script>
 
+    <style>
+        .my_img{
+            width: 730px;
+            height: 454px;
+        }
+    </style>
+
 </head>
 
 <body ng-app="pinyougou"
@@ -536,7 +543,7 @@
                     <div class="carousel-inner">
                         <!-- 轮播图-->
                         <div ng-repeat="c in contentList"
-                             class="{{$index == 0 ? 'active' : ''}} item">
+                             class="{{$index == 0 ? 'active' : ''}} item my_img">
                             <a href="{{c.url}}">
                                 <img src="{{c.pic}}"/>
                             </a>
