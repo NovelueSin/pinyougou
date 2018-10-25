@@ -9,6 +9,7 @@ import com.pinyougou.pojo.ContentCategory;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.ContentCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
@@ -27,6 +28,8 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 
 	@Autowired
 	private ContentCategoryMapper contentCategoryMapper;
+	@Autowired
+	private RedisTemplate redisTemplate;
 
 	/** 添加方法 */
 	public void save(ContentCategory contentCategory){

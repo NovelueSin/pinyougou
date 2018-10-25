@@ -9,115 +9,162 @@ import com.pinyougou.pojo.Content;
 import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+
 /**
  * ContentServiceImpl 服务接口实现类
- * @date 2018-10-19 20:32:54
+ *
  * @version 1.0
+ * @date 2018-10-19 20:32:54
  */
 @Service(interfaceName = "com.pinyougou.service.ContentService")
 @Transactional
 public class ContentServiceImpl implements ContentService {
 
-	@Autowired
-	private ContentMapper contentMapper;
+    @Autowired
+    private ContentMapper contentMapper;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
-	/** 添加方法 */
-	public void save(Content content){
-		try {
-			contentMapper.insertSelective(content);
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 添加方法
+     */
+    public void save(Content content) {
+        try {
+            contentMapper.insertSelective(content);
+            /*清楚redis 缓存*/
+            redisTemplate.delete("content");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** 修改方法 */
-	public void update(Content content){
-		try {
-			contentMapper.updateByPrimaryKeySelective(content);
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 修改方法
+     */
+    public void update(Content content) {
+        try {
+            contentMapper.updateByPrimaryKeySelective(content);
+            /*清楚redis 缓存*/
+            redisTemplate.delete("content");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** 根据主键id删除 */
-	public void delete(Serializable id){
-		try {
-			contentMapper.deleteByPrimaryKey(id);
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 根据主键id删除
+     */
+    public void delete(Serializable id) {
+        try {
+            contentMapper.deleteByPrimaryKey(id);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** 批量删除 */
-	public void deleteAll(Serializable[] ids){
-		try {
-			// 创建示范对象
-			Example example = new Example(Content.class);
-			// 创建条件对象
-			Example.Criteria criteria = example.createCriteria();
-			// 创建In条件
-			criteria.andIn("id", Arrays.asList(ids));
-			// 根据示范对象删除
-			contentMapper.deleteByExample(example);
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 批量删除
+     */
+    public void deleteAll(Serializable[] ids) {
+        try {
+            // 创建示范对象
+            Example example = new Example(Content.class);
+            // 创建条件对象
+            Example.Criteria criteria = example.createCriteria();
+            // 创建In条件
+            criteria.andIn("id", Arrays.asList(ids));
+            // 根据示范对象删除
+            contentMapper.deleteByExample(example);
+            /*清楚redis 缓存*/
+            redisTemplate.delete("content");
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** 根据主键id查询 */
-	public Content findOne(Serializable id){
-		try {
-			return contentMapper.selectByPrimaryKey(id);
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 根据主键id查询
+     */
+    public Content findOne(Serializable id) {
+        try {
+            return contentMapper.selectByPrimaryKey(id);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** 查询全部 */
-	public List<Content> findAll(){
-		try {
-			return contentMapper.selectAll();
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 查询全部
+     */
+    public List<Content> findAll() {
+        try {
+            return contentMapper.selectAll();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	/** 多条件分页查询 */
-	public PageResult findByPage(Content content, int page, int rows){
-		try {
-			PageInfo<Content> pageInfo = PageHelper.startPage(page, rows)
-				.doSelectPageInfo(new ISelect() {
-					@Override
-					public void doSelect() {
-						contentMapper.selectAll();
-					}
-				});
-			return new PageResult(pageInfo.getTotal(),pageInfo.getList());
-		}catch (Exception ex){
-			throw new RuntimeException(ex);
-		}
-	}
+    /**
+     * 多条件分页查询
+     */
+    public PageResult findByPage(Content content, int page, int rows) {
+        try {
+            PageInfo<Content> pageInfo = PageHelper.startPage(page, rows)
+                    .doSelectPageInfo(new ISelect() {
+                        @Override
+                        public void doSelect() {
+                            contentMapper.selectAll();
+                        }
+                    });
+            return new PageResult(pageInfo.getTotal(), pageInfo.getList());
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-	@Override
-	public List<Content> findContentByCategoryId(Long categoryId) {
-		try {
-			Example example = new Example(Content.class);
-			Example.Criteria criteria = example.createCriteria();
-			//添加等于条件
-			criteria.andEqualTo("categoryId", categoryId);
-			criteria.andEqualTo("status", "1");
-			/*排序 升序*/
-			example.orderBy("sortOrder").asc();
-			return contentMapper.selectByExample(example);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+    /**
+     * 根据分类id查询广告内容
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Content> findContentByCategoryId(Long categoryId) {
+        /*定义广告数据*/
+        List<Content> contents = null;
+        try {
+            /*从Redis中获取广告*/
+            contents = (List<Content>) redisTemplate.boundValueOps("content").get();
+            if (contents != null && contents.size() > 0) {
+                return contents;
+            }
+        } catch (Exception e) {
+        }
+        try {
+            Example example = new Example(Content.class);
+            Example.Criteria criteria = example.createCriteria();
+            //添加等于条件
+            criteria.andEqualTo("categoryId", categoryId);
+            criteria.andEqualTo("status", "1");
+            /*排序 升序*/
+            example.orderBy("sortOrder").asc();
 
+            /*查询广告数据*/
+            contents = contentMapper.selectByExample(example);
+            /*存入redis*/
+            try {
+                redisTemplate.boundValueOps("content").set(contents);
+            } catch (Exception e1) {}
+            return contents;
+        } catch (Exception se) {
+            throw new RuntimeException(se);
+        }
+    }
 }
