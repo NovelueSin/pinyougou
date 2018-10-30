@@ -2,8 +2,8 @@ package com.pinyougou.manager.controller;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Brand;
-import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.BrandService;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +51,7 @@ public class BrandController {
 
     /*分页查询品牌*/
     @GetMapping("/findByPage")
-    public PageResult findByPage(Brand brand,Integer page, Integer rows) {
+    public PageResult findByPage(Brand brand, Integer page, Integer rows) {
 
         /*Get请求中文转码*/
         try{

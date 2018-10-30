@@ -1,10 +1,10 @@
 package com.pinyougou.service;
 
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Brand;
-import com.pinyougou.pojo.PageResult;
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**

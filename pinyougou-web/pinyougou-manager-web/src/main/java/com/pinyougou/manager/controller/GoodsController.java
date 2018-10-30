@@ -1,8 +1,8 @@
 package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Goods;
-import com.pinyougou.pojo.PageResult;
 import com.pinyougou.service.GoodsService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;

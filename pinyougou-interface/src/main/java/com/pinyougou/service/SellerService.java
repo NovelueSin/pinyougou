@@ -1,9 +1,10 @@
 package com.pinyougou.service;
 
-import com.pinyougou.pojo.PageResult;
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Seller;
-import java.util.List;
+
 import java.io.Serializable;
+import java.util.List;
 /**
  * SellerService 服务接口
  * @date 2018-09-26 11:12:14

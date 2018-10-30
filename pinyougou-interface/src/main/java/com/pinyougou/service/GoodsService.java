@@ -1,10 +1,10 @@
 package com.pinyougou.service;
 
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Goods;
-import com.pinyougou.pojo.PageResult;
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 /**
  * GoodsService 服务接口
  * @date 2018-09-26 11:12:14

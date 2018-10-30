@@ -1,11 +1,11 @@
 package com.pinyougou.service;
 
-import com.pinyougou.pojo.PageResult;
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Specification;
 import com.pinyougou.pojo.SpecificationOption;
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**

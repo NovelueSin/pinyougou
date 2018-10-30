@@ -1,10 +1,10 @@
 package com.pinyougou.service;
 
+import com.pinyougou.common.pojo.PageResult;
 import com.pinyougou.pojo.Content;
-import com.pinyougou.pojo.PageResult;
 
-import java.util.List;
 import java.io.Serializable;
+import java.util.List;
 /**
  * 广告服务
  * ContentService 服务接口
